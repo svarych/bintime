@@ -49,15 +49,67 @@ public class Store {
         submit();
     }
 
+    double getMinPrice(PriceType type) {
+        $(byClassName("icon-CP-Grid")).shouldBe(visible).click();
+        List<String> excl = new ArrayList<>();
+        List<String> incl = new ArrayList<>();
+        ElementsCollection e;
+        ElementsCollection i;
+
+        SelenideElement nextButton = $(byXpath("(//a[.='Volgende '])[1]"));
+        if (nextButton.isDisplayed()) {
+            while (nextButton.isDisplayed()) {
+
+                e = $$(byXpath("//div[contains(@class,'priceExcl')]"));
+                i = $$(byXpath("//div[contains(@class,'priceIncl')]"));
+
+                for (SelenideElement price : e) {
+                    excl.add(price.getText());
+                }
+                for (SelenideElement price : i) {
+                    incl.add(price.getText());
+                }
+                nextButton.shouldBe(visible).click();
+            }
+        } else {
+            e = $$(byXpath("//div[contains(@class,'priceExcl')]"));
+            i = $$(byXpath("//div[contains(@class,'priceIncl')]"));
+
+            for (SelenideElement price : e) {
+                excl.add(price.getText());
+            }
+            for (SelenideElement price : i) {
+                incl.add(price.getText());
+            }
+        }
+
+        System.out.println(excl);
+        System.out.println(incl);
+
+        if (type == PriceType.EXCL) {
+            System.out.println(minimum(excl));
+            return minimum(excl);
+        }
+        if (type == PriceType.INCL) {
+            System.out.println(minimum(incl));
+            return minimum(incl);
+        } else {
+            System.out.println("NO PRICE LIST");
+            return 0.0;
+        }
+    }
+
+    enum PriceType {
+        EXCL, INCL
+    }
+
     double minPriceExcl() {
         ElementsCollection prices = $$(byXpath("//div[contains(@class,'priceExcl')]"));
-//        ElementsCollection prices = $$(byClassName("priceExcl"));
         return minimum(prices);
     }
 
     double minPriceIncl() {
         ElementsCollection prices = $$(byXpath("//div[contains(@class,'priceIncl')]"));
-//        ElementsCollection prices = $$(byClassName("priceIncl"));
         return minimum(prices);
     }
 
@@ -70,6 +122,18 @@ public class Store {
             priceList.add(Double.parseDouble(txt));
         }
         int index = priceList.indexOf(min(priceList));
+        return priceList.get(index);
+    }
+
+    private double minimum(@Nonnull List<String> collection) {
+        List<Double> priceList = new ArrayList<>();
+        for (String price : collection) {
+            String txt = price.split(" ")[0]
+                    .replace(",-", ".0")
+                    .replace(",", ".");
+            priceList.add(Double.parseDouble(txt));
+        }
+        int index = collection.indexOf(min(collection));
         return priceList.get(index);
     }
 

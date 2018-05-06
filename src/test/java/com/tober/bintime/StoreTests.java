@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.tober.bintime.Store.PriceType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,14 +18,16 @@ class StoreTests extends Store {
     static void setUp() {
 //        Configuration.browser = "phantomJs";
         Configuration.browser = "chrome";
+        Configuration.holdBrowserOpen = true;
 //        Configuration.browserSize = "1920x1080";
-        open("https://www.centralpoint.nl/notebooks-laptops/");
+        open("https://www.centralpoint.nl");
         getWebDriver().manage().window().maximize();
     }
 
     @Test
     @DisplayName("Size of result set and filter data should be equals #Random filter")
     void randomFilterTest() {
+        open("https://www.centralpoint.nl/notebooks-laptops/");
         applyRandomFilter();
         assertEquals(getNumber(), sizeFromAllPages());
     }
@@ -32,16 +35,26 @@ class StoreTests extends Store {
     @Test
     @DisplayName("Size of result set and filter data should be equals #Target filter")
     void targetFilterTest() {
+        open("https://www.centralpoint.nl/monitoren/");
         applyFilter("Merk", 1);
         assertEquals(getNumber(), sizeFromAllPages());
     }
 
     @Test
-    @DisplayName("Min price on page should be equals or greater than price-filter min value")
-    void priceFilterTest() {
+    @DisplayName("Min price on page should be equals or greater than price-filter min value #1000-1010")
+    void priceFilterTest0() {
         applyPriceFilter(1000, 1010);
         assertTrue(minPriceIncl() >= getMinFilterPrice());
         assertTrue(minPriceExcl() >= getMinFilterPrice());
+    }
+
+//    @Test //TODO debug and speed up
+    @DisplayName("Min price on page should be equals or greater than price-filter min value #1000-5000")
+    void priceFilterTest1() {
+        open("https://www.centralpoint.nl/monitoren/");
+        applyPriceFilter(1000, 5000);
+        assertTrue(getMinPrice(INCL) >= getMinFilterPrice());
+        assertTrue(getMinPrice(EXCL) >= getMinFilterPrice());
     }
 
     @AfterEach
