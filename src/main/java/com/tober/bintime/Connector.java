@@ -13,6 +13,12 @@ public class Connector {
         return response;
     }
 
+    private int responseCode;
+
+    public int getResponseCode() {
+        return this.responseCode;
+    }
+
     private ObjectNode[] response;
 
     private Properties properties = new Properties();
@@ -33,8 +39,8 @@ public class Connector {
         connection.setRequestProperty("User-Agent", "TOBER");
 
         System.out.print("Sending request to " + url + "... ");
-        int responseCode = connection.getResponseCode();
-        System.out.println("Status: " + responseCode);
+        this.responseCode = connection.getResponseCode();
+        System.out.println("Status: " + getResponseCode());
 
         setResponse(connection);
     }
