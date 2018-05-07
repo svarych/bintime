@@ -42,8 +42,7 @@ class StoreTests extends Store {
     @DisplayName("Min price on page should be equals or greater than price-filter min value #1000-1010")
     void priceFilterTest0() {
         applyPriceFilter(1000, 1010);
-        assertTrue(minPriceIncl() >= getMinFilterPrice());
-        assertTrue(minPriceExcl() >= getMinFilterPrice());
+        assertTrue(getMinPrice() >= getMinFilterPrice());
     }
 
     @Test

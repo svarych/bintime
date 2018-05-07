@@ -56,15 +56,24 @@ public class Store {
     private List<Double> getPrices() {
         ArrayList<Double> excl = new ArrayList<>();
 
-        while ($(byXpath("//a[contains(@class, 'next')]")).isDisplayed()) {
+        if ($(byXpath("//a[contains(@class, 'next')]")).isDisplayed()) {
+            while ($(byXpath("//a[contains(@class, 'next')]")).isDisplayed()) {
 
+                for (String s : new ArrayList<>($$(byXpath("//div[contains(@class,'priceExcl')]")).texts())) {
+                    excl.add(Double.parseDouble(s.split(" ")[0]
+                            .replace(",-", ".0")
+                            .replace(",", ".")));
+                }
+                $(byXpath("//a[contains(@class, 'next')]")).click();
+            }
+        } else {
             for (String s : new ArrayList<>($$(byXpath("//div[contains(@class,'priceExcl')]")).texts())) {
                 excl.add(Double.parseDouble(s.split(" ")[0]
                         .replace(",-", ".0")
                         .replace(",", ".")));
             }
-            $(byXpath("//a[contains(@class, 'next')]")).click();
         }
+
         return excl;
     }
 
