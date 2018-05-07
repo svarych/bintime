@@ -1,7 +1,6 @@
 package com.tober.bintime;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ListTests extends ListSearch {
 
@@ -36,6 +36,6 @@ class ListTests extends ListSearch {
             add("02G-P4-6150-KR");
         }});
 
-        Assertions.assertTrue(listsAreEquals(getCodeList(), getCodeListFromSite()));
+        assertEquals(getCodeList(), getCodeListFromSite());
     }
 }
