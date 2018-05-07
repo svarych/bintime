@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class ListSearch {
+class ListSearch {
 
     private ArrayList<String> codeList = new ArrayList<String>() {{
         add("J153289");
@@ -23,19 +23,19 @@ public class ListSearch {
         add("02G-P4-6150-KR");
     }};
 
-    public List<String> getCodeList() {
+    List<String> getCodeList() {
         return this.codeList;
     }
 
-    public void setCodeList(ArrayList<String> codeList) {
+    void setCodeList(ArrayList<String> codeList) {
         this.codeList = codeList;
     }
 
-    public void addToCodeList(ArrayList<String> codeList, String value) {
+    void addToCodeList(ArrayList<String> codeList, String value) {
         codeList.add(value);
     }
 
-    public void removeFromCodeList(ArrayList<String> codeList, String value) {
+    void removeFromCodeList(ArrayList<String> codeList, String value) {
         codeList.remove(value);
     }
 
