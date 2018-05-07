@@ -1,0 +1,2 @@
+# bintime
+mvn clean test
