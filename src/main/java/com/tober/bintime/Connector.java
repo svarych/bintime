@@ -15,7 +15,7 @@ public class Connector {
 
     private int responseCode;
 
-    public int getResponseCode() {
+    int getResponseCode() {
         return this.responseCode;
     }
 
@@ -60,6 +60,4 @@ public class Connector {
         ObjectMapper mapper = new ObjectMapper();
         this.response = mapper.readValue(response, ObjectNode[].class);
     }
-
-
 }
