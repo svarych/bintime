@@ -10,16 +10,6 @@ import static com.codeborne.selenide.Selenide.$;
 class ListSearch {
 
     private ArrayList<String> codeList = new ArrayList<String>() {{
-        add("J153289");
-        add("MQ3D2ZD/A");
-        add("L36852-H2436-M101");
-        add("1WZ03EA#ABH");
-        add("875839-425");
-        add("C5J91A#B19");
-        add("FM32SD45B/10");
-        add("204446-101");
-        add("GV-N710D3-1GL");
-        add("02G-P4-6150-KR");
     }};
 
     List<String> getCodeList() {
