@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,6 +41,4 @@ class RestTests extends Rest {
         assertEquals(getCountry("Ukraine").get("population").toString(), "42836922");
         assertEquals(getCountry("Ukraine").get("borders").toString(), "[\"BLR\",\"HUN\",\"MDA\",\"POL\",\"ROU\",\"RUS\",\"SVK\"]");
     }
-
-
 }
