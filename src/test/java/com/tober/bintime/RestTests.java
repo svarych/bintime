@@ -5,8 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static java.lang.Double.parseDouble;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * ALL OK
+ */
 
 class RestTests extends Rest {
 
@@ -17,7 +22,7 @@ class RestTests extends Rest {
     @DisplayName("Latvia should have border with Estonia")
     void latviaShouldHaveBorderWithEstonia() throws IOException {
         sendGetRequest();
-        assertEquals(getResponseCode(), 200);
+        assertEquals(200, getResponseCode());
         assertTrue(getCountry("Latvia").get("borders").toString()
                 .contains(getCountry("Estonia").get("alpha3Code").toString()));
     }
@@ -26,15 +31,15 @@ class RestTests extends Rest {
     @DisplayName("Check that Ukraine has area more than 500000.0")
     void ukraineAreaShouldBeMoreThan() throws IOException {
         sendGetRequest();
-        assertEquals(getResponseCode(), 200);
-        assertTrue(Double.parseDouble(getCountry("Ukraine").get("area").toString()) > 500000.0);
+        assertEquals(200, getResponseCode());
+        assertTrue(parseDouble(getCountry("Ukraine").get("area").toString()) > 500000.0);
     }
 
     @Test
     @DisplayName("Output values: Name, Capital, Region, Population, Borders.")
     void getOutputValues() throws IOException {
         sendGetRequest();
-        assertEquals(getResponseCode(), 200);
+        assertEquals(200, getResponseCode());
         assertEquals(getCountry("Ukraine").get("name").toString(), "\"Ukraine\"");
         assertEquals(getCountry("Ukraine").get("capital").toString(), "\"Kiev\"");
         assertEquals(getCountry("Ukraine").get("region").toString(), "\"Europe\"");

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ListTests extends ListSearch {
@@ -16,10 +17,14 @@ class ListTests extends ListSearch {
     @BeforeAll
     static void setUp() {
         Configuration.browser = "chrome";
+        Configuration.holdBrowserOpen = true;
         open("https://www.centralpoint.nl/");
         getWebDriver().manage().window().maximize();
     }
 
+
+    // TODO: П’яте завдання не повинно працювати в циклі, це не правильно.
+    // todo: Є спеціальні можливості в тестових фреймворках які допомагають працювати з наборами даних.
     @Test
     @DisplayName("With codes from test-class #Наглядно ;)")
     void oneTestCaseThatWillSearchForEachProduct0() {
@@ -36,6 +41,10 @@ class ListTests extends ListSearch {
             add("02G-P4-6150-KR");
         }});
 
-        assertEquals(getCodeList(), getCodeListFromSite());
+//        assertArrayEquals(getCodeList().toArray(), getRawCodeListFromSite().toArray());
+        System.out.println(getCodeList());
+        System.out.println(getRawCodeListFromSite());
     }
+
+
 }

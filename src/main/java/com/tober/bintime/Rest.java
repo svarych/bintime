@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 
-public class Rest extends Connector {
+/**
+ * ALL OK
+ */
+
+class Rest extends Connector {
     Rest() throws IOException {
     }
 

@@ -1,13 +1,18 @@
 package com.tober.bintime;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.codeborne.selenide.SelenideElement;
+
+import java.util.*;
 
 import static com.codeborne.selenide.Selectors.byClassName;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 class ListSearch {
+
+    private SelenideElement searchField = $(byXpath("//input[@type='search']"));
+    private SelenideElement submitButton = $(byXpath("//button[@type='submit']"));
 
     private ArrayList<String> codeList = new ArrayList<String>() {{
     }};
@@ -29,32 +34,54 @@ class ListSearch {
     }
 
 
-    List<String> getCodeListFromSite() {
-        List<String> list = new ArrayList<>();
-        String code;
-        for (String s : getCodeList()) {
-            $(byXpath("//input[@type='search']")).setValue(s);
-            $(byXpath("//button[@type='submit']")).click();
-            if ($(byClassName("productDetail")).$(byClassName("productCode")).isDisplayed()) {
-                code = $(byClassName("productDetail")).$(byClassName("productCode")).getText().split(" ")[1];
-                list.add(code);
-            }
-            if ($(byClassName("productNumber")).isDisplayed()) {
-                code = $(byClassName("productNumber")).getText().replace("(", "").replace(")", "");
-                list.add(code);
-            }
-        }
-        return list;
+    // TODO: П’яте завдання не повинно працювати в циклі, це не правильно.
+    List<String> getRawCodeListFromSite() {
+        List<String> list;
+        searchField.setValue(getCodeList().toString()
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", "")
+        );
+        submitButton.click();
+
+        list = $$(byClassName("productNumber")).texts();
+
+//        return (getCodeListFromSite(list)).sort(Comparator.comparing(getCodeList().size()));
     }
 
-    boolean listsAreEquals(List<String> a, List<String> b) {
-        boolean x = false;
-
-        for (int i = 0; i < a.size(); i++) {
-            x = a.get(i).equals(b.get(i));
+    private List<String> getCodeListFromSite(List<String> list) {
+        List<String> l = new LinkedList<>();
+        for (String valueFromSite : list) {
+            for (String valueFromInput : getCodeList()){
+                if (valueFromSite.contains(valueFromInput)){
+                    if (!l.contains(valueFromInput)){
+                        l.add(valueFromInput);
+                    }
+                }
+            }
         }
+        return l;
+    }
+
+    private String unique(String s1, String s2){
+        if (s1.equals(s2)){
+            return s1;
+        }
+        return null;
+    }
+
+    boolean listsAreEquals(List<String> first, List<String> second) {
+        boolean x = false;
+        for (String item : first) {
+            x = item.equals(second.get(first.indexOf(item)));
+        }
+
+        if (!x) {
+            System.err.println("Lists are different!");
+            System.err.println("one: " + first);
+            System.err.println("two: " + second);
+        }
+
         return x;
     }
 }
-
-
