@@ -2,7 +2,10 @@ package com.tober.bintime;
 
 import com.codeborne.selenide.SelenideElement;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.codeborne.selenide.Selectors.byClassName;
 import static com.codeborne.selenide.Selectors.byXpath;
@@ -45,26 +48,26 @@ class ListSearch {
         submitButton.click();
 
         list = $$(byClassName("productNumber")).texts();
-
-//        return (getCodeListFromSite(list)).sort(Comparator.comparing(getCodeList().size()));
+        return (getCodeListFromSite(list));
     }
 
     private List<String> getCodeListFromSite(List<String> list) {
         List<String> l = new LinkedList<>();
         for (String valueFromSite : list) {
-            for (String valueFromInput : getCodeList()){
-                if (valueFromSite.contains(valueFromInput)){
-                    if (!l.contains(valueFromInput)){
+            for (String valueFromInput : getCodeList()) {
+                if (valueFromSite.contains(valueFromInput)) {
+                    if (!l.contains(valueFromInput)) {
                         l.add(valueFromInput);
                     }
                 }
             }
         }
+        Collections.sort(l);
         return l;
     }
 
-    private String unique(String s1, String s2){
-        if (s1.equals(s2)){
+    private String unique(String s1, String s2) {
+        if (s1.equals(s2)) {
             return s1;
         }
         return null;
