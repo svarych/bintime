@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ListTests extends ListSearch {
 
-//    @BeforeAll
+    @BeforeAll
     static void setUp() {
         Configuration.browser = "chrome";
         Configuration.holdBrowserOpen = true;
@@ -45,47 +45,15 @@ class ListTests extends ListSearch {
 
     @Test
     @DisplayName("Assert that all codes from data file contains in result set.")
-    void oneTestCaseThatWillSearchForEachProduct1() {
-        setCodeList(new ArrayList<String>() {{
-            add("J153289");
-            add("MQ3D2ZD/A");
-            add("L36852-H2436-M101");
-            add("1WZ03EA#ABH");
-            add("875839-425");
-            add("C5J91A#B19");
-            add("FM32SD45B/10");
-            add("204446-101");
-            add("GV-N710D3-1GL");
-            add("02G-P4-6150-KR");
-        }});
-
-        // Перевіряємо, чи всі елементи початкового списку присутні в результаті видачі
+    void oneTestCaseThatWillSearchForEachProduct1() throws IOException {
+        setCodeList("./src/main/resources/codes.txt");
         assertTrue(getRawCodeListFromSite().containsAll(getCodeList()));
     }
 
     @Test
     @DisplayName("Assert that code list from data file equals with result set.")
-    void oneTestCaseThatWillSearchForEachProduct2() {
-        setCodeList(new ArrayList<String>() {{
-            add("J153289");
-            add("MQ3D2ZD/A");
-            add("L36852-H2436-M101");
-            add("1WZ03EA#ABH");
-            add("875839-425");
-            add("C5J91A#B19");
-            add("FM32SD45B/10");
-            add("204446-101");
-            add("GV-N710D3-1GL");
-            add("02G-P4-6150-KR");
-        }});
-
-        // Перевіряємо, чи списки однакові
-        assertEquals(getCodeList(), getRawCodeListFromSite());
-    }
-
-    @Test
-    void file() throws IOException {
+    void oneTestCaseThatWillSearchForEachProduct2() throws IOException {
         setCodeList("./src/main/resources/codes.txt");
-        System.out.println(getCodeList());
+        assertEquals(getCodeList(), getRawCodeListFromSite());
     }
 }

@@ -47,6 +47,7 @@ class ListSearch {
     // TODO: П’яте завдання не повинно працювати в циклі, це не правильно.
     List<String> getRawCodeListFromSite() {
         List<String> list;
+        searchField.clear();
         searchField.setValue(getCodeList().toString()
                 .replace("[", "")
                 .replace("]", "")
