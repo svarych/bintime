@@ -2,9 +2,12 @@ package com.tober.bintime;
 
 import com.codeborne.selenide.SelenideElement;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codeborne.selenide.Selectors.byClassName;
@@ -21,6 +24,7 @@ class ListSearch {
     }};
 
     List<String> getCodeList() {
+        Collections.sort(this.codeList);
         return this.codeList;
     }
 
@@ -28,14 +32,17 @@ class ListSearch {
         this.codeList = codeList;
     }
 
-    void addToCodeList(ArrayList<String> codeList, String value) {
-        codeList.add(value);
-    }
+    void setCodeList(String filename) throws IOException {
+        File file = new File(filename);
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String line;
 
-    void removeFromCodeList(ArrayList<String> codeList, String value) {
-        codeList.remove(value);
-    }
+        while ((line = bufferedReader.readLine()) != null) {
+            codeList.add(line);
+        }
 
+    }
 
     // TODO: П’яте завдання не повинно працювати в циклі, це не правильно.
     List<String> getRawCodeListFromSite() {
@@ -48,43 +55,15 @@ class ListSearch {
         submitButton.click();
 
         list = $$(byClassName("productNumber")).texts();
-        return (getCodeListFromSite(list));
+        return getResultSet(list);
     }
 
-    private List<String> getCodeListFromSite(List<String> list) {
-        List<String> l = new LinkedList<>();
-        for (String valueFromSite : list) {
-            for (String valueFromInput : getCodeList()) {
-                if (valueFromSite.contains(valueFromInput)) {
-                    if (!l.contains(valueFromInput)) {
-                        l.add(valueFromInput);
-                    }
-                }
-            }
+    private List<String> getResultSet(List<String> list) {
+        List<String> clear = new ArrayList<>();
+        for (String element : list) {
+            clear.add(element.replace("(", "").replace(")", ""));
         }
-        Collections.sort(l);
-        return l;
-    }
-
-    private String unique(String s1, String s2) {
-        if (s1.equals(s2)) {
-            return s1;
-        }
-        return null;
-    }
-
-    boolean listsAreEquals(List<String> first, List<String> second) {
-        boolean x = false;
-        for (String item : first) {
-            x = item.equals(second.get(first.indexOf(item)));
-        }
-
-        if (!x) {
-            System.err.println("Lists are different!");
-            System.err.println("one: " + first);
-            System.err.println("two: " + second);
-        }
-
-        return x;
+        Collections.sort(clear);
+        return clear;
     }
 }
