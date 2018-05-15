@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Selectors.byClassName;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 class ListSearch {
 
@@ -44,7 +45,6 @@ class ListSearch {
 
     }
 
-    // TODO: П’яте завдання не повинно працювати в циклі, це не правильно.
     List<String> getRawCodeListFromSite() {
         List<String> list;
         searchField.clear();
@@ -60,11 +60,41 @@ class ListSearch {
     }
 
     private List<String> getResultSet(List<String> list) {
-        List<String> clear = new ArrayList<>();
+        List<String> cleanSet = new ArrayList<>();
         for (String element : list) {
-            clear.add(element.replace("(", "").replace(")", ""));
+            cleanSet.add(element.replace("(", "").replace(")", ""));
         }
-        Collections.sort(clear);
-        return clear;
+        Collections.sort(cleanSet);
+        return cleanSet;
+    }
+
+    void setCode(String code) {
+        checkForPageIsLoaded();
+
+        SelenideElement searchField = $(byXpath("//input[@type='search']"));
+        searchField.setValue(code).pressEnter().clear();
+
+    }
+
+    String getCodeFromProductPage() throws Exception {
+        SelenideElement productCode = $(byXpath("//span[@class='productCode']"));
+        String returnCode = null;
+
+        checkForPageIsLoaded();
+        if (productCode.isDisplayed()) {
+            returnCode = $(byXpath("//span[@class='productCode']")).getText().split(":")[1].split("\\|")[0].trim();
+        }
+        else if ($$(byXpath("//div[contains(@class,'card')]")).size() > 1) {
+            throw new Exception("It is more than one product on page!");
+        }
+        return returnCode;
+    }
+
+    private void checkForPageIsLoaded() {
+        if ($(byXpath("//div[@class='error-code']")).isDisplayed()) {
+            if ($(byXpath("//div[@class='error-code']")).getText().equals("HTTP ERROR 500")) {
+                getWebDriver().navigate().back();
+            }
+        }
     }
 }

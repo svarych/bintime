@@ -4,6 +4,8 @@ import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,9 +26,31 @@ class ListTests extends ListSearch {
         getWebDriver().manage().window().maximize();
     }
 
+    // Using data provider #TOO SLOW!
+    @ParameterizedTest
+    @ValueSource(strings =
+            {
+                    "J153289",
+                    "MQ3D2ZD/A",
+                    "L36852-H2436-M101",
+                    "1WZ03EA#ABH",
+                    "875839-425",
+                    "C5J91A#B19",
+                    "FM32SD45B/10",
+                    "204446-101",
+                    "GV-N710D3-1GL",
+                    "02G-P4-6150-KR"
+            })
+    @DisplayName("using data provider")
+    void oneTestCaseThatWillSearchForEachProduct0(String code) throws Exception {
+        setCode(code);
+        assertEquals(code, getCodeFromProductPage());
+    }
+
+    // Using List<> # should be GREEN - assert CONTAINS
     @Test
-    @DisplayName("Assert that all codes from test-class contains in result set.")
-    void oneTestCaseThatWillSearchForEachProduct0() {
+    @DisplayName("Assert that all codes from test-class CONTAINS in result set.")
+    void oneTestCaseThatWillSearchForEachProduct1() {
         setCodeList(new ArrayList<String>() {{
             add("J153289");
             add("MQ3D2ZD/A");
@@ -43,17 +67,20 @@ class ListTests extends ListSearch {
         assertTrue(getRawCodeListFromSite().containsAll(getCodeList()));
     }
 
+    // Using data file # should be RED - assert EQUALS
     @Test
-    @DisplayName("Assert that all codes from data file contains in result set.")
-    void oneTestCaseThatWillSearchForEachProduct1() throws IOException {
+    @DisplayName("Assert that all codes from data file CONTAINS in result set.")
+    void oneTestCaseThatWillSearchForEachProduct2() throws IOException {
         setCodeList("./src/main/resources/codes.txt");
         assertTrue(getRawCodeListFromSite().containsAll(getCodeList()));
     }
 
+    // Using data file # should be GREEN - assert CONTAINS
     @Test
-    @DisplayName("Assert that code list from data file equals with result set.")
-    void oneTestCaseThatWillSearchForEachProduct2() throws IOException {
+    @DisplayName("Assert that code list from data file EQUALS with result set.")
+    void oneTestCaseThatWillSearchForEachProduct3() throws IOException {
         setCodeList("./src/main/resources/codes.txt");
         assertEquals(getCodeList(), getRawCodeListFromSite());
     }
+
 }
